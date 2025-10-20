@@ -109,7 +109,35 @@ class _MyHomePageState extends State<MyHomePage> {
           final alarm = alarms[index];
           return GestureDetector(
             onLongPress: () {
-              showAboutDialog(context: context,);
+              showDialog(context: context, builder: (context) {
+                return AlertDialog(
+                  icon: FlutterLogo(),
+                  content: Text("Are you sure.\nYou can delete your message "),
+                  actions: [
+                    ElevatedButton(onPressed: () async{
+                      final db = AlarmDatabase();
+                      await  db.deleteAlarm(alarm['id']);
+                      Navigator.pop(context);
+                    }, child: Text('Delete')),
+                    ElevatedButton(onPressed: () async{
+                      Navigator.pop(context);
+                    }, child: Text('close')),
+                  ],
+                );
+                  
+                  AboutDialog(
+                  
+                  
+
+                  children: [
+                    ElevatedButton(onPressed: () async{
+                      final db = AlarmDatabase();
+                      await  db.deleteAlarm(alarm['id']);
+                    }, child: Text('data'))
+                  ],
+                );
+              },);
+
 
             },
             child: ListTile(
@@ -137,8 +165,40 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (val) async{
                   value.toggleAlarm(alarm['id'], val);
                   if(val){
-                    final  janiNa = Alarm.scheduled;
-                    print(janiNa);
+
+                    final now = DateTime.now();
+                    DateTime alarmDateTime = DateTime(
+                      now.year,
+                      now.month,
+                      now.day,
+                      alarm['hour'],
+                      alarm['minute'],
+                    );
+                    if (alarmDateTime.isBefore(now)) {
+                      alarmDateTime = alarmDateTime.add(const Duration(days: 1));
+                      final alarmSettings = AlarmSettings(
+                        id: alarm['id'],
+                        dateTime: alarmDateTime,
+                        assetAudioPath: 'assets/alarm.mp3',
+                        loopAudio: true,
+                        vibrate: true,
+                        notificationSettings: NotificationSettings(
+                          title: 'Alarm',
+                          body: 'Time to wake up!',
+                          stopButton: 'Stop Alarm',
+                        ),
+                        volumeSettings: VolumeSettings.fade(
+                          volume: 0.8,
+                          fadeDuration: Duration(seconds: 5),
+                          volumeEnforced: true,
+                        ),
+                      );
+                      await Alarm.set(alarmSettings: alarmSettings);
+                    }
+
+
+                    // final  janiNa = Alarm.scheduled;
+                    // print(janiNa);
                   }else{
                     await Alarm.stop(alarm['id']);
 

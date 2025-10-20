@@ -1,6 +1,9 @@
 
 import 'package:alarm/alarm.dart';
+import 'package:alarm_clock/provider/provider_services.dart';
+import 'package:alarm_clock/services/alarm_database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AlarmNotificationScreen extends StatefulWidget {
   final AlarmSettings alarmSettings;
@@ -46,6 +49,7 @@ class _AlarmNotificationScreenState extends State<AlarmNotificationScreen> {
               ElevatedButton(
                 onPressed: () {
                   //stop alarm
+                  context.read<ProviderServices>().toggleAlarm(widget.alarmSettings.id, false);
                   Alarm.stop(
                     widget.alarmSettings.id,
                   ).then((_) => Navigator.pop(context));
