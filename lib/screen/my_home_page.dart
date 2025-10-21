@@ -165,7 +165,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (val) async{
                   value.toggleAlarm(alarm['id'], val);
                   if(val){
-
                     final now = DateTime.now();
                     DateTime alarmDateTime = DateTime(
                       now.year,
@@ -179,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       final alarmSettings = AlarmSettings(
                         id: alarm['id'],
                         dateTime: alarmDateTime,
-                        assetAudioPath: 'assets/alarm.mp3',
+                        assetAudioPath: 'assets/black.mp3',
                         loopAudio: true,
                         vibrate: true,
                         notificationSettings: NotificationSettings(
@@ -195,10 +194,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       );
                       await Alarm.set(alarmSettings: alarmSettings);
                     }
-
-
-                    // final  janiNa = Alarm.scheduled;
-                    // print(janiNa);
                   }else{
                     await Alarm.stop(alarm['id']);
 

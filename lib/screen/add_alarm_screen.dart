@@ -189,15 +189,10 @@ class _AddAlarmScreenState extends State<AddAlarmScreen> {
                       );
                       if(widget.isEdit!){
                         final db = AlarmDatabase();
-                        final allAlarms = await AlarmDatabase().getAlarms();
-                        final newId = allAlarms.isEmpty
-                            ? 1
-                            : allAlarms.last['id'] + 1;
-
                         final alarmSettings = AlarmSettings(
-                          id: newId,
+                          id: widget.alarm?['id'],
                           dateTime: alarmDateTime,
-                          assetAudioPath: 'assets/alarm.mp3',
+                          assetAudioPath: 'assets/black.mp3',
                           loopAudio: true,
                           vibrate: true,
                           notificationSettings: NotificationSettings(
@@ -213,7 +208,6 @@ class _AddAlarmScreenState extends State<AddAlarmScreen> {
                         );
                         await Alarm.set(alarmSettings: alarmSettings);
                         // Sqflite-এ save
-
                         await db.updateAlarm({
                           'id': widget.alarm?['id'],
                           'hour': selectedHour,
@@ -232,7 +226,7 @@ class _AddAlarmScreenState extends State<AddAlarmScreen> {
                         final alarmSettings = AlarmSettings(
                           id: newId,
                           dateTime: alarmDateTime,
-                          assetAudioPath: 'assets/alarm.mp3',
+                          assetAudioPath: 'assets/black.mp3',
                           loopAudio: true,
                           vibrate: true,
                           notificationSettings: NotificationSettings(

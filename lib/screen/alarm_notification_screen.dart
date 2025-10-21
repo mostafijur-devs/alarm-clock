@@ -1,4 +1,3 @@
-
 import 'package:alarm/alarm.dart';
 import 'package:alarm_clock/provider/provider_services.dart';
 import 'package:flutter/material.dart';
@@ -46,12 +45,25 @@ class _AlarmNotificationScreenState extends State<AlarmNotificationScreen> {
                 child: const Text("Snooze"),
               ),
               ElevatedButton(
-                onPressed: ()async {
+                onPressed: () async {
                   //stop alarm
-                  context.read<ProviderServices>().toggleAlarm(widget.alarmSettings.id, false);
-                 await Alarm.stop(
-                    widget.alarmSettings.id,
-                  ).then((_) => Navigator.pop(context));
+                  try {
+                    await Alarm.stop(widget.alarmSettings.id).then((
+                      value,
+                    ) async {
+                      if (context.mounted) {
+                        await context
+                            .read<ProviderServices>()
+                            .toggleAlarm(widget.alarmSettings.id, false)
+                            .then((value) {
+                              Navigator.pop(context);
+                            });
+                      }
+                    });
+                  } catch (e) {
+
+                    print("This is  alarm stop error $e");
+                  }
                 },
                 child: const Text("Stop"),
               ),

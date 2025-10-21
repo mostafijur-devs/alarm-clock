@@ -12,9 +12,26 @@ class ProviderServices extends ChangeNotifier {
   }
 
   Future<void> toggleAlarm(int id, bool isActive) async {
-    await AlarmDatabase().updateAlarm(
-      {'id': id, 'is_active': isActive ? 1 : 0},
-    );
+    await AlarmDatabase().updateAlarm({
+      'id': id,
+      'is_active': isActive ? 1 : 0,
+    });
     await loadAlarms(); // ডাটাবেস থেকে নতুন ডেটা নিয়ে আসা
   }
+
+  // sowNotification() async {
+  //   final notification = FlutterLocalNotificationsPlugin();
+  //
+  //   final initializationSettings = InitializationSettings();
+  //   await notification.initialize(initializationSettings);
+  //
+  //   final android = AndroidNotificationDetails(
+  //     'channelId',
+  //     'channelName',
+  //     actions: [AndroidNotificationAction('1', 'fkdm')],
+  //
+  //   );
+  //   final notificationDetails = NotificationDetails(android: android);
+  //   notification.show(1, 'title', 'body', notificationDetails);
+  // }
 }
